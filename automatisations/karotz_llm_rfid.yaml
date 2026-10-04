@@ -1,0 +1,80 @@
+blueprint:
+  name: "Karotz AI - Interaction RFID & LLM"
+  description: >
+    Déclenche une consultation de l'agent de conversation (Claude) lors du passage d'un badge RFID
+    sur le Karotz et énonce la réponse à l'oral.
+  domain: automation
+  input:
+    karotz_speaker:
+      name: Karotz Speaker
+      description: L'entité lecteur média de votre Karotz AI.
+      selector:
+        entity:
+          domain: media_player
+          integration: karotz_ai
+    karotz_led:
+      name: Karotz LED
+      description: L'entité LED ventrale du Karotz.
+      selector:
+        entity:
+          domain: light
+          integration: karotz_ai
+    conversation_agent:
+      name: Agent de conversation LLM
+      description: L'agent vocal (ex: Claude / Anthropic) configuré dans Assistant Vocal.
+      selector:
+        conversation_agent: {}
+    target_tag_id:
+      name: ID du tag RFID (Optionnel)
+      description: Laisser vide pour réagir à TOUS les tags, ou indiquer un ID spécifique (ex: 04a1b2c3d4).
+      default: ""
+      selector:
+        text:
+    prompt_text:
+      name: Consigne / Prompt pour le LLM
+      description: "Le texte ou la question transmise à Claude lorsque la puce est scannée."
+      default: "Fais-moi un résumé concis de la journée, de la météo et de l'état des lumières de la maison."
+      selector:
+        text:
+          multiline: true
+
+mode: single
+
+trigger:
+  - platform: event
+    event_type: karotz_ai_rfid_scanned
+
+condition:
+  - condition: template
+    value_template: >
+      {{ !input target_tag_id == "" or trigger.event.data.tag_id == !input target_tag_id }}
+
+action:
+  # 1. LED Orange : Claude est en train de réfléchir
+  - service: light.turn_on
+    target:
+      entity_id: !input karotz_led
+    data:
+      rgb_color: [255, 120, 0]
+
+  # 2. Envoi de la consigne à l'agent de conversation LLM
+  - service: conversation.process
+    data:
+      agent_id: !input conversation_agent
+      text: !input prompt_text
+    response_variable: agent_response
+
+  # 3. Le Karotz prononce la réponse générée par Claude
+  - service: media_player.play_media
+    target:
+      entity_id: !input karotz_speaker
+    data:
+      media_type: "text"
+      media_id: "{{ agent_response.response.speech.plain.speech }}"
+
+  # 4. LED Verte : Traitement terminé
+  - service: light.turn_on
+    target:
+      entity_id: !input karotz_led
+    data:
+      rgb_color: [0, 255, 0]

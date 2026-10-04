@@ -1,0 +1,10 @@
+{
+  "domain": "karotz_ai",
+  "name": "Karotz AI",
+  "codeowners": ["@Desperado88"],
+  "config_flow": true,
+  "documentation": "https://github.com/Desperado88/hacs-homeassistant-karotz-ai",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Desperado88/hacs-homeassistant-karotz-ai/issues",
+  "version": "1.0.0"
+}
