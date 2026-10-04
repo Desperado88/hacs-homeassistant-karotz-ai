@@ -6,5 +6,60 @@
   "documentation": "https://github.com/Desperado88/hacs-homeassistant-karotz-ai",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/Desperado88/hacs-homeassistant-karotz-ai/issues",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "requirements": [],
+  "dependencies": [],
+  "services": [
+    {
+      "service": "assign_rfid_tag",
+      "name": "Assigner un tag RFID",
+      "description": "Associe un tag RFID à une action pour un Karotz spécifique",
+      "fields": {
+        "entry_id": {
+          "name": "ID de l'entrée",
+          "description": "L'ID de configuration du Karotz",
+          "required": true,
+          "example": "abc123..."
+        },
+        "tag_id": {
+          "name": "ID du tag",
+          "description": "L'ID unique du tag RFID",
+          "required": true,
+          "example": "04a1b2c3d4"
+        },
+        "tag_name": {
+          "name": "Nom du tag",
+          "description": "Nom explicite du tag",
+          "required": false,
+          "example": "Tag Météo"
+        },
+        "action": {
+          "name": "Action",
+          "description": "Action à déclencher",
+          "required": false,
+          "example": "meteo_du_jour"
+        }
+      }
+    },
+    {
+      "service": "delete_rfid_tag",
+      "name": "Supprimer un tag RFID",
+      "description": "Supprime un tag RFID associé à un Karotz",
+      "fields": {
+        "entry_id": {
+          "name": "ID de l'entrée",
+          "description": "L'ID de configuration du Karotz",
+          "required": true,
+          "example": "abc123..."
+        },
+        "tag_id": {
+          "name": "ID du tag",
+          "description": "L'ID du tag RFID à supprimer",
+          "required": true,
+          "example": "04a1b2c3d4"
+        }
+      }
+    }
+  ],
+  "platforms": ["media_player", "light", "number", "sensor"]
 }
