@@ -1,3 +1,11 @@
+> **⚠️ Statut du projet : Abandonné mais fonctionnel**
+> 
+> Ce projet est **abandonné** et ne sera plus maintenu activement.
+> Cependant, il est **fonctionnel en l'état** et peut être utilisé tel quel.
+> N'hésitez pas à le forker et à contribuer si vous souhaitez poursuivre son développement.
+
+---
+
 # Karotz AI — Home Assistant Integration 🥕🤖
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/default)
